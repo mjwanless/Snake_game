@@ -1,4 +1,5 @@
 from turtle import Screen, Turtle
+from snake import Snake
 import time
 
 # Setup of screen
@@ -6,14 +7,20 @@ screen = Screen()
 screen.setup(width=600, height=600)
 screen.bgcolor("black")
 screen.title("My Snake Game!")
+screen.tracer(0)
 
-# segment list for building the snake out
+# Running codeS
 
+snake = Snake()
 
+# Keypresses
+screen.listen()
 
+screen.onkeypress(snake.up, "Up")
+screen.onkeypress(snake.down, "Down")
+screen.onkeypress(snake.left, "Left")
+screen.onkeypress(snake.right, "Right")
 
-
-# Running code
 
 game_is_on = True
 
@@ -21,12 +28,7 @@ while game_is_on:
 	screen.update()
 	time.sleep(0.1)
 
-	for seg_num in range((len(segments)-1), 0, -1):
-		new_x = segments[(seg_num - 1)].xcor()
-		new_y = segments[(seg_num - 1)].ycor()
-		segments[seg_num].goto(new_x, new_y)
-
-	segments[0].forward(20)
+	snake.move()
 
 # Needed for screen close out at end
 

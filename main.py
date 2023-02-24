@@ -1,6 +1,11 @@
-from turtle import Screen, Turtle
+from turtle import Screen
 from snake import Snake
+from food import Food
+from scoreboard import Scoreboard
+
 import time
+
+COLLISION_DISTANCE = 15
 
 # Setup of screen
 screen = Screen()
@@ -12,6 +17,8 @@ screen.tracer(0)
 # Running codeS
 
 snake = Snake()
+food = Food()
+scoreboard = Scoreboard()
 
 # Keypresses
 screen.listen()
@@ -21,7 +28,6 @@ screen.onkeypress(snake.down, "Down")
 screen.onkeypress(snake.left, "Left")
 screen.onkeypress(snake.right, "Right")
 
-
 game_is_on = True
 
 while game_is_on:
@@ -29,6 +35,23 @@ while game_is_on:
 	time.sleep(0.1)
 
 	snake.move()
+
+	# 	Detect collision with food
+	if snake.head.distance(food) < COLLISION_DISTANCE:
+		food.refresh()
+		snake.extend()
+		scoreboard.increase_score()
+
+	# 	Detect collision with wall
+	if snake.head.xcor() > 280 or snake.head.xcor() < -280 or snake.head.ycor() > 280 or snake.head.ycor() < -280:
+		game_is_on = False
+		scoreboard.game_over()
+
+	#   Detect collision with tail
+	for segment in snake.segments[1:]:
+		if snake.head.distance(segment) < 10:
+			game_is_on = False
+			scoreboard.game_over()
 
 # Needed for screen close out at end
 
